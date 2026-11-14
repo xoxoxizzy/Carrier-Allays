@@ -9,7 +9,7 @@ Use this checklist when turning the template into a plugin.
    `plugin.yml` build substitution requires this name to match `rootProject.name`.
 3. Set `group` in `build.gradle.kts` to the Java package.
 4. Rename the main and test package directories, declarations, and imports from
-   `com.crimsonwarpedcraft.exampleplugin`.
+   ` net.mcmatcha.carrierallay`.
 
 ## Example code
 

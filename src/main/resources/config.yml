@@ -1,13 +1,27 @@
-# Response message for /example ping.
-# Supports MiniMessage formatting: https://docs.advntr.dev/minimessage/format.html
-pong-message: "Pong!"
+# Determines how long an allay flys away before teleporting near a player that is too far away to delivery normally.
+# Default: 10s
+allay-flyaway-milliseconds: 10000
 
-# Response message for /example greet <player>.
-# Use {player} as a placeholder for the target player's name.
-# Supports MiniMessage formatting: https://docs.advntr.dev/minimessage/format.html
-greet-message: "Hello, {player}!"
+# Determines how close an allay needs to be to the player to complete the delivery.
+# Default: 4 blocks
+# This value is in the distance squared format not blocks.
+near-distance: 16
 
-# Response message for /example creepersKilled.
-# Use {count} as a placeholder for the sender's creeper-kill count.
-# Supports MiniMessage formatting: https://docs.advntr.dev/minimessage/format.html
-creepers-killed-message: "You have killed {count} creeper(s)!"
+# Determines how far a player needs to be before deciding to teleport instead of flying directly.
+# Default: 150 blocks
+# This value is in the dinstance squared format not blocks.
+teleport-distance: 22500
+
+# Determines the minimum amount of blocks from the player the allay should teleport to.
+# Default: 45 blocks
+# This value is in blocks not distance squared.
+teleport-min-offset: 45.00
+
+# Determines the maximum amount of blocks from the player the allay should teleport to.
+# Default: 55 blocks
+# This value is in blocks not distance squared.
+teleport-max-offset: 55.00
+
+# Determines how fast carrier allays move
+# Default: 1
+carrier-allay-speed: 1.0

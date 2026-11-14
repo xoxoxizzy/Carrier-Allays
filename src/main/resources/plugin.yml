@@ -1,4 +1,4 @@
-main: ${PACKAGE}.${NAME}
+main: net.mcmatcha.carrierallay.CarrierAllaysPlugin
 name: ${NAME}
 version: "${VERSION}"
 api-version: "26.1.2"

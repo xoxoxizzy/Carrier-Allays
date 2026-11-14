@@ -1,19 +1,16 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.github.spotbugs.snom.SpotBugsTask
 import org.gradle.api.plugins.jvm.JvmTestSuite
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 
 plugins {
-    checkstyle
-    id("com.github.spotbugs") version "6.5.13"
     id("com.gradleup.shadow") version "9.6.1"
     id("xyz.jpenilla.run-paper") version "3.1.0"
     java
 }
 
-group = "com.crimsonwarpedcraft.exampleplugin"
+group = "net.mcmatcha.carrierallay"
 
 fun getTime(): String {
     val sdf = SimpleDateFormat("yyMMdd-HHmm")
@@ -67,9 +64,6 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:26.3.build.248-stable")
 
     // Code quality and unit testing. Not required for code functionality.
-    compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.5")
-    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
-    testCompileOnly("com.github.spotbugs:spotbugs-annotations:4.10.5")
     testImplementation("io.papermc.paper:paper-api:26.3.build.248-stable")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
@@ -95,7 +89,20 @@ tasks.test {
 }
 
 tasks.runServer {
-    minecraftVersion("26.1.2")
+    minecraftVersion("26.3")
+
+    javaLauncher.set(
+        javaToolchains.launcherFor {
+            languageVersion.set(JavaLanguageVersion.of(25))
+            vendor.set(JvmVendorSpec.JETBRAINS)
+        }
+    )
+
+    jvmArgs(
+        "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005",
+        "-XX:+AllowEnhancedClassRedefinition"
+    )
+
 }
 
 testing {
@@ -127,34 +134,6 @@ configurations.named("integrationTestImplementation") {
 tasks.processResources {
     filesMatching("**/plugin.yml") {
         expand(mapOf("NAME" to rootProject.name, "VERSION" to version, "PACKAGE" to project.group))
-    }
-}
-
-checkstyle {
-    toolVersion = "14.0.0"
-    maxWarnings = 0
-}
-
-configurations.named("checkstyle") {
-    resolutionStrategy.capabilitiesResolution
-        .withCapability("com.google.collections:google-collections") {
-            select("com.google.guava:guava:23.0")
-        }
-}
-
-tasks.withType<Checkstyle>().configureEach {
-    reports {
-        xml.required.set(false)
-        html.required.set(true)
-    }
-}
-
-tasks.withType<SpotBugsTask>().configureEach {
-    reports.create("html") {
-        required.set(true)
-    }
-    reports.create("xml") {
-        required.set(false)
     }
 }
 
