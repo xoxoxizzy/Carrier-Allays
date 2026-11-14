@@ -1,4 +1,4 @@
-# carrier allays 🕊️
+# carrier allays 
 
 carrier pigeons, but they're allays.
 
