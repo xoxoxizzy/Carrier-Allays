@@ -18,3 +18,5 @@ little fly-off and then quietly teleports most of the way there. nobody
 has to see that part.
 
 runs on paper. `./gradlew build` if you wanna make it yourself.
+
+hi maddie if ur reading this pls add my plugin :3
