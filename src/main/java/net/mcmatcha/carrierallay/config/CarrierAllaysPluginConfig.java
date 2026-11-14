@@ -51,6 +51,38 @@ public class CarrierAllaysPluginConfig implements Config {
     @JsonProperty("carrier-allay-speed")
     private double carrierAllaySpeed = 1d;
 
+    /**
+     * Determines how far the player can drift from the current path goal before the allay repaths.
+     * Default: 4 blocks
+     * This value is in the distance squared format not blocks.
+     */
+    @JsonProperty("repath-distance")
+    private double repathDistance = 16d;
+
+    /**
+     * Determines how far ahead of the allay the fly-away waypoint is placed.
+     * Default: 16 blocks
+     * This value is in blocks not distance squared.
+     */
+    @JsonProperty("fly-off-waypoint-distance")
+    private double flyOffWaypointDistance = 16d;
+
+    /**
+     * Determines how far in front of the player the allay hovers while waiting.
+     * Default: 2.5 blocks
+     * This value is in blocks not distance squared.
+     */
+    @JsonProperty("hover-distance")
+    private double hoverDistance = 2.5d;
+
+    /**
+     * Determines how close the allay needs to be to its hover spot to hold still.
+     * Default: 2 blocks
+     * This value is in the distance squared format not blocks.
+     */
+    @JsonProperty("hover-tolerance")
+    private double hoverTolerance = 4d;
+
     public long getFlyAwayMillis() {
         return flyAwayMillis;
     }
@@ -73,6 +105,22 @@ public class CarrierAllaysPluginConfig implements Config {
 
     public double getCarrierAllaySpeed() {
         return carrierAllaySpeed;
+    }
+
+    public double getRepathDistance() {
+        return repathDistance;
+    }
+
+    public double getFlyOffWaypointDistance() {
+        return flyOffWaypointDistance;
+    }
+
+    public double getHoverDistance() {
+        return hoverDistance;
+    }
+
+    public double getHoverTolerance() {
+        return hoverTolerance;
     }
 
 }

@@ -25,3 +25,23 @@ teleport-max-offset: 55.00
 # Determines how fast carrier allays move
 # Default: 1
 carrier-allay-speed: 1.0
+
+# Determines how far the player can drift from the current path goal before the allay repaths.
+# Default: 4 blocks
+# This value is in the distance squared format not blocks.
+repath-distance: 16
+
+# Determines how far ahead of the allay the fly-away waypoint is placed.
+# Default: 16 blocks
+# This value is in blocks not distance squared.
+fly-off-waypoint-distance: 16
+
+# Determines how far in front of the player the allay hovers while waiting.
+# Default: 2.5 blocks
+# This value is in blocks not distance squared.
+hover-distance: 2.5
+
+# Determines how close the allay needs to be to its hover spot to hold still.
+# Default: 2 blocks
+# This value is in the distance squared format not blocks.
+hover-tolerance: 4

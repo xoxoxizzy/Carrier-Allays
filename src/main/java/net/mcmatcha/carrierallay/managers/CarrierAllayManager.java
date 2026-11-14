@@ -19,27 +19,28 @@ import org.bukkit.util.Vector;
 import com.destroystokyo.paper.entity.Pathfinder;
 
 import net.kyori.adventure.text.Component;
+import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
 import net.mcmatcha.carrierallay.models.CarrierAllayData;
 import net.mcmatcha.carrierallay.models.CarrierAllayStatus;
 
 public class CarrierAllayManager {
 
     // Delivery counts as arrived within 4 blocks
-    private static final double NEAR_DISTANCE_SQUARED = 16d;
+    private static final double NEAR_DISTANCE_SQUARED = CarrierAllaysPlugin.CONFIG_INSTANCE.getNearDistance();
 
     // Beyond 150 blocks we teleport instead of flying
-    private static final double TELEPORT_DISTANCE_SQUARED = 22500d;
+    private static final double TELEPORT_DISTANCE_SQUARED =  CarrierAllaysPlugin.CONFIG_INSTANCE.getTeleportDistance();
 
     // Teleports land this many blocks from the player (squared: 2025-3025), at
     // a random angle, far enough out that you don't see the allay pop in
-    private static final double TELEPORT_MIN_OFFSET = 45d;
-    private static final double TELEPORT_MAX_OFFSET = 55d;
+    private static final double TELEPORT_MIN_OFFSET =  CarrierAllaysPlugin.CONFIG_INSTANCE.getTeleportMinOffset();
+    private static final double TELEPORT_MAX_OFFSET =  CarrierAllaysPlugin.CONFIG_INSTANCE.getTeleportMaxOffset();
 
-    private static final double REPATH_DISTANCE_SQUARED = 16d;
-    private static final double FLY_OFF_WAYPOINT_DISTANCE = 16d;
+    private static final double REPATH_DISTANCE_SQUARED = CarrierAllaysPlugin.CONFIG_INSTANCE.getRepathDistance();
+    private static final double FLY_OFF_WAYPOINT_DISTANCE = CarrierAllaysPlugin.CONFIG_INSTANCE.getFlyOffWaypointDistance();
 
-    private static final double HOVER_DISTANCE = 2.5d;
-    private static final double HOVER_TOLERANCE_SQUARED = 4d;
+    private static final double HOVER_DISTANCE = CarrierAllaysPlugin.CONFIG_INSTANCE.getHoverDistance();
+    private static final double HOVER_TOLERANCE_SQUARED = CarrierAllaysPlugin.CONFIG_INSTANCE.getHoverTolerance();
 
     private CarrierAllayData carrierAllayData;
     private final Allay allay;
