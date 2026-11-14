@@ -3,12 +3,11 @@ package net.mcmatcha.carrierallay.tasks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -34,21 +33,11 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
 
     }
 
-    public List<Allay> getAllLoadedAllays() {
-        List<Allay> allays = new ArrayList<>();
-
-        for (World world : Bukkit.getWorlds()) {
-            allays.addAll(world.getEntitiesByClass(Allay.class));
-        }
-
-        return allays;
-    }
-
     @Override
     public void accept(BukkitTask t) {
 
-        // GET EVERY ALLAY
-        List<Allay> allays = getAllLoadedAllays();
+        // GET EVERY CARRIER ALLAY
+        Set<Allay> allays = CarrierAllaysPlugin.ACTIVE_CARRIERS_STORE.getActiveCarrierAllays();
 
         List<CarrierAllayManager> managers = new ArrayList<>();
 
@@ -94,6 +83,7 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
         // Respawn a wild allay: the vanilla "liked player" memory (the sender
         // who handed over the item) has no API to clear and would keep the
         // allay following the sender forever
+        CarrierAllaysPlugin.ACTIVE_CARRIERS_STORE.RemoveCarrierAllay(carrierAllay.getData().carrier());
         carrierAllay.respawnAsWildAllay();
     }
 
@@ -113,22 +103,24 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
 
             if (teleportAt == null) {
                 flyAwayTeleportAt.put(carrierAllay.getAllay(), now + FLY_AWAY_MILLIS);
-                carrierAllay.getPathfinder().moveTo(target);
+                carrierAllay.flyOffToward(target, CARRIER_ALLAY_SPEED);
                 return;
             }
 
             if (now < teleportAt) {
-                carrierAllay.getPathfinder().moveTo(target);
+                carrierAllay.flyOffToward(target, CARRIER_ALLAY_SPEED);
                 return;
             }
 
             flyAwayTeleportAt.remove(carrierAllay.getAllay());
-            carrierAllay.teleportNear(target);
+
+            if (!carrierAllay.teleportNear(target))
+                return;
+
             carrierAllay.notifyPlayer(carrierAllay.getTargetPlayer(), "A carrier allay approaches from a long distance...");
         }
 
-        //continouously pathfind to the target until you are close
-        carrierAllay.getPathfinder().moveTo(target, CARRIER_ALLAY_SPEED);
+        carrierAllay.pathfindTo(target, CARRIER_ALLAY_SPEED);
 
         // Once close, drop the item and then switch to returning mode
         if (carrierAllay.isCarrierAllayNearTarget()) {
@@ -155,21 +147,22 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
 
             if (teleportAt == null) {
                 flyAwayTeleportAt.put(carrierAllay.getAllay(), now + FLY_AWAY_MILLIS);
-                carrierAllay.getPathfinder().moveTo(sender);
+                carrierAllay.flyOffToward(sender, CARRIER_ALLAY_SPEED);
                 return;
             }
 
             if (now < teleportAt) {
-                carrierAllay.getPathfinder().moveTo(sender);
+                carrierAllay.flyOffToward(sender, CARRIER_ALLAY_SPEED);
                 return;
             }
 
             flyAwayTeleportAt.remove(carrierAllay.getAllay());
-            carrierAllay.teleportNear(sender);
+
+            if (!carrierAllay.teleportNear(sender))
+                return;
         }
 
-        // Continouously pathfind to the sender until you are close
-        carrierAllay.getPathfinder().moveTo(sender, CARRIER_ALLAY_SPEED);
+        carrierAllay.pathfindTo(sender, CARRIER_ALLAY_SPEED);
 
         // Once you are close goto the complete loop
         if (carrierAllay.isCarrierAllayNearSender()) {
@@ -188,7 +181,7 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
 
         // Wait for sender to give item
         // Follow the player
-        carrierAllay.getPathfinder().moveTo(sender, CARRIER_ALLAY_SPEED);
+        carrierAllay.hoverNear(sender, CARRIER_ALLAY_SPEED);
 
         // When we are given an item, switch to delivery loop
         if (!carrierAllay.HasItem())

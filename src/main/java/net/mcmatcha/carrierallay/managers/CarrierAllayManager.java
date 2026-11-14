@@ -35,6 +35,12 @@ public class CarrierAllayManager {
     private static final double TELEPORT_MIN_OFFSET = 45d;
     private static final double TELEPORT_MAX_OFFSET = 55d;
 
+    private static final double REPATH_DISTANCE_SQUARED = 16d;
+    private static final double FLY_OFF_WAYPOINT_DISTANCE = 16d;
+
+    private static final double HOVER_DISTANCE = 2.5d;
+    private static final double HOVER_TOLERANCE_SQUARED = 4d;
+
     private CarrierAllayData carrierAllayData;
     private final Allay allay;
 
@@ -109,6 +115,56 @@ public class CarrierAllayManager {
         return this.allay.getPathfinder();
     }
 
+    public void pathfindTo(Player player, double speed) {
+        Location destination = player.getLocation();
+        Pathfinder.PathResult path = getPathfinder().getCurrentPath();
+
+        if (path != null
+                && path.getNextPoint() != null
+                && path.getFinalPoint() != null
+                && path.getFinalPoint().distanceSquared(destination) < REPATH_DISTANCE_SQUARED)
+            return;
+
+        getPathfinder().moveTo(destination, speed);
+    }
+
+    public void flyOffToward(Player player, double speed) {
+        Location from = getAllay().getLocation();
+        Vector direction = player.getLocation().toVector().subtract(from.toVector());
+
+        if (direction.lengthSquared() < 0.01d)
+            direction = new Vector(0, 1, 0);
+
+        double distance = Math.min(direction.length(), FLY_OFF_WAYPOINT_DISTANCE);
+        getPathfinder().moveTo(from.add(direction.normalize().multiply(distance)), speed);
+    }
+
+    public void hoverNear(Player player, double speed) {
+        if (getAllay().getWorld() != player.getWorld())
+            return;
+
+        Location hoverLocation = getHoverSpot(player);
+
+        if (getAllay().getLocation().distanceSquared(hoverLocation) <= HOVER_TOLERANCE_SQUARED) {
+            getPathfinder().stopPathfinding();
+            return;
+        }
+
+        getPathfinder().moveTo(hoverLocation, speed);
+    }
+
+    private Location getHoverSpot(Player player) {
+        Location playerLocation = player.getLocation();
+        Vector facing = playerLocation.getDirection().setY(0d);
+
+        if (facing.lengthSquared() < 0.01d)
+            facing = new Vector(0d, 0d, 1d);
+
+        Location hoverLocation = playerLocation.clone().add(facing.normalize().multiply(HOVER_DISTANCE));
+        hoverLocation.setY(playerLocation.getY() + 1.25d);
+        return hoverLocation;
+    }
+
     public boolean isCarrierAllayTooFarFromPlayer(Player player) {
         Location carrierLocation = getAllay().getLocation();
         Location targetLocation = player.getLocation();
@@ -137,16 +193,24 @@ public class CarrierAllayManager {
         return player.getName();
     }
 
-    public void teleportNear(Player player) {
-        Location destination = player.getLocation().clone();
-        double angle = ThreadLocalRandom.current().nextDouble(Math.PI * 2d);
-        double offset = TELEPORT_MIN_OFFSET
-            + ThreadLocalRandom.current().nextDouble(TELEPORT_MAX_OFFSET - TELEPORT_MIN_OFFSET);
+    public boolean teleportNear(Player player) {
+        World world = player.getWorld();
 
-        destination.add(Math.cos(angle) * offset, 0d, Math.sin(angle) * offset);
-        destination = findSafeSpot(destination);
+        for (int i = 0; i < 4; i++) {
+            double angle = ThreadLocalRandom.current().nextDouble(Math.PI * 2d);
+            double offset = TELEPORT_MIN_OFFSET
+                + ThreadLocalRandom.current().nextDouble(TELEPORT_MAX_OFFSET - TELEPORT_MIN_OFFSET);
 
-        getAllay().teleport(destination);
+            Location candidate = player.getLocation().clone().add(Math.cos(angle) * offset, 0d, Math.sin(angle) * offset);
+
+            if (!world.isChunkLoaded(candidate.getBlockX() >> 4, candidate.getBlockZ() >> 4))
+                continue;
+
+            getAllay().teleport(findSafeSpot(candidate));
+            return true;
+        }
+
+        return false;
     }
 
     private Location findSafeSpot(Location center) {

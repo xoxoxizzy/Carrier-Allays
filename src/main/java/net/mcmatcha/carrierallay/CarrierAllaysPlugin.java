@@ -6,12 +6,14 @@ import java.io.IOException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.crimsonwarpedcraft.cwcommons.config.bukkit.BukkitConfigManagerBuilder;
-import com.crimsonwarpedcraft.cwcommons.store.DataStore;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
 import net.mcmatcha.carrierallay.config.CarrierAllaysPluginConfig;
-import net.mcmatcha.carrierallay.listener.EntityRenameListener;
+import net.mcmatcha.carrierallay.listener.AllayDeathEventListener;
+import net.mcmatcha.carrierallay.listener.AllayEntityLoadListener;
+import net.mcmatcha.carrierallay.listener.AllayEntityRenameListener;
+import net.mcmatcha.carrierallay.managers.CarrierAllaysStore;
 import net.mcmatcha.carrierallay.tasks.AllayDeliveryScheduledTask;
 
 /**
@@ -24,6 +26,7 @@ public class CarrierAllaysPlugin extends JavaPlugin {
   // Singleton
   public static CarrierAllaysPlugin INSTANCE;
   public static CarrierAllaysPluginConfig CONFIG_INSTANCE;
+  public static CarrierAllaysStore ACTIVE_CARRIERS_STORE;
 
   public CarrierAllaysPlugin() {
 
@@ -40,6 +43,8 @@ public class CarrierAllaysPlugin extends JavaPlugin {
     CommandAPI.onEnable();
     saveDefaultConfig();
 
+    ACTIVE_CARRIERS_STORE = new CarrierAllaysStore();
+
     try {
       CONFIG_INSTANCE = new BukkitConfigManagerBuilder()
         .build()
@@ -50,8 +55,14 @@ public class CarrierAllaysPlugin extends JavaPlugin {
       return;
     }
       
+    ACTIVE_CARRIERS_STORE.initActiveCarrierAllays(getServer());
+
     getServer().getPluginManager()
-      .registerEvents(new EntityRenameListener(this), this);
+      .registerEvents(new AllayEntityRenameListener(this), this);
+    getServer().getPluginManager()
+      .registerEvents(new AllayDeathEventListener(), this);
+    getServer().getPluginManager()
+      .registerEvents(new AllayEntityLoadListener(), this);
   
     getServer().getScheduler().runTaskTimer(INSTANCE, new AllayDeliveryScheduledTask(), 0, 10);
 

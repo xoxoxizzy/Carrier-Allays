@@ -22,11 +22,11 @@ import net.mcmatcha.carrierallay.models.CarrierAllayStatus;
  * @author Copyright (c) xoxoxizzy. All Rights Reserved.
  */
 
-public class EntityRenameListener implements Listener {
+public class AllayEntityRenameListener implements Listener {
 
     private final Server minecraftServer;
 
-    public EntityRenameListener(CarrierAllaysPlugin minecraftPlugin) {
+    public AllayEntityRenameListener(CarrierAllaysPlugin minecraftPlugin) {
         this.minecraftServer = minecraftPlugin.getServer();
     }
 
@@ -68,6 +68,7 @@ public class EntityRenameListener implements Listener {
         );
 
         newData.saveToAllayPDC((Allay)entity);
+        CarrierAllaysPlugin.ACTIVE_CARRIERS_STORE.AddCarrierAllay(newData.carrier());
         
     }
 
