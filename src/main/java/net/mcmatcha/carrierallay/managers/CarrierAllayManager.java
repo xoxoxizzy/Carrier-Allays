@@ -4,6 +4,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
@@ -12,8 +14,10 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.CraftingRecipe;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.util.Vector;
 
 import com.destroystokyo.paper.entity.Pathfinder;
@@ -127,6 +131,32 @@ public class CarrierAllayManager {
             return;
 
         getPathfinder().moveTo(destination, speed);
+    }
+
+    public void returnToPlayer() {
+        World world = allay.getWorld();
+        Player sender = getSenderPlayer();
+
+        world.spawnParticle(Particle.ENCHANT, allay.getLocation(), 30);
+        world.playSound(allay.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 1.0f, 1.0f);
+
+        // Give the player back the carrier item.
+        ItemStack carrierItem = getCarrierItem();
+
+        // Sender went offline: leave the item where the allay stood
+        if (sender == null || !sender.isOnline()) {
+            world.dropItemNaturally(allay.getLocation(), carrierItem);
+            allay.remove();
+            return;
+        }
+
+        sender.give(carrierItem);
+        allay.remove();
+    }
+
+    private ItemStack getCarrierItem() {
+        Recipe recipe = Bukkit.getRecipe(new NamespacedKey("carrier_allays", "crafting/carrier_allay"));
+        return ((CraftingRecipe) recipe).getResult();
     }
 
     public void flyOffToward(Player player, double speed) {

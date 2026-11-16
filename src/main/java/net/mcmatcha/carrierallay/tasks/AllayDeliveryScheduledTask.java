@@ -8,22 +8,30 @@ import java.util.WeakHashMap;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
+import net.mcmatcha.carrierallay.config.CarrierAllaysPluginConfig;
 import net.mcmatcha.carrierallay.managers.CarrierAllayManager;
 import net.mcmatcha.carrierallay.models.CarrierAllayStatus;
 
 public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
 
+    // The carrier item comes from the bundled datapack recipe, so returning
+    // the item only works when that recipe is actually loaded
+    private static final NamespacedKey CARRIER_RECIPE_KEY = new NamespacedKey("carrier_allays", "crafting/carrier_allay");
+
     private List<CarrierAllayManager> carrierAllays;
-    private static Logger LOGGER = CarrierAllaysPlugin.INSTANCE.getLogger();
+    private static final Logger LOGGER = CarrierAllaysPlugin.INSTANCE.getLogger();
+    private static final CarrierAllaysPluginConfig CONFIG = CarrierAllaysPlugin.CONFIG_INSTANCE;
 
     // How long the allay visibly flies away before the delivery teleport
-    private static final long FLY_AWAY_MILLIS = CarrierAllaysPlugin.CONFIG_INSTANCE.getFlyAwayMillis();
-    private static final double CARRIER_ALLAY_SPEED = CarrierAllaysPlugin.CONFIG_INSTANCE.getCarrierAllaySpeed();
+    private static final long FLY_AWAY_MILLIS = CONFIG.getFlyAwayMillis();
+    private static final double CARRIER_ALLAY_SPEED = CONFIG.getCarrierAllaySpeed();
 
     // When each too-far allay should teleport, per allay (weakly held so
     // entries go byebye with the entity)
@@ -80,10 +88,20 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
         // Drop anything still held
         carrierAllay.DropItem();
 
+  
+        CarrierAllaysPlugin.ACTIVE_CARRIERS_STORE.RemoveCarrierAllay(carrierAllay.getData().carrier());
+
+        if (CONFIG.getMatchaFlavoured() && Bukkit.getRecipe(CARRIER_RECIPE_KEY) != null) {
+            carrierAllay.returnToPlayer();
+            return;
+        }
+
+        if (CONFIG.getMatchaFlavoured())
+            LOGGER.warning("matcha-flavoured is enabled but the carrier allay recipe is not loaded; respawning a wild allay instead.");
+
         // Respawn a wild allay: the vanilla "liked player" memory (the sender
         // who handed over the item) has no API to clear and would keep the
         // allay following the sender forever
-        CarrierAllaysPlugin.ACTIVE_CARRIERS_STORE.RemoveCarrierAllay(carrierAllay.getData().carrier());
         carrierAllay.respawnAsWildAllay();
     }
 
