@@ -25,7 +25,7 @@
     "requirements": [
         [
             "has_book_and_quill",
-            "has_fragment"
+            "has_favour"
         ]
     ],
     "rewards": {
