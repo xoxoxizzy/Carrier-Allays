@@ -23,8 +23,8 @@ teleport-min-offset: 45.00
 teleport-max-offset: 55.00
 
 # Determines how fast carrier allays move
-# Default: 1
-carrier-allay-speed: 1.0
+# Default: 1.5
+carrier-allay-speed: 1.5
 
 # Determines how far the player can drift from the current path goal before the allay repaths.
 # Default: 4 blocks
@@ -45,3 +45,7 @@ hover-distance: 2.5
 # Default: 2 blocks
 # This value is in the distance squared format not blocks.
 hover-tolerance: 4
+
+# Enables "matcha flavoured" mode. Tweaks how you spawn carriers, requires the matcha flavoured datapack installed.
+matcha-flavoured: false
+mf-datapack-filename: matcha-flavoured

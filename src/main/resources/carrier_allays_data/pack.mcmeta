@@ -1,0 +1,19 @@
+{
+    "pack": {
+        "min_format": [97.1],
+        "max_format": [97.1],
+        "description": [
+            {
+                "text": "Carrier Allays",
+                "color": "#8ff4ff"
+            },
+            {
+                "text": "\n"
+            },
+            {
+                "text": "0.1 for 26.3",
+                "color": "#908b8b"
+            }
+        ]
+    }
+}

@@ -1,11 +1,6 @@
 package net.mcmatcha.carrierallay;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.crimsonwarpedcraft.cwcommons.config.bukkit.BukkitConfigManagerBuilder;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
@@ -44,17 +39,6 @@ public class CarrierAllaysPlugin extends JavaPlugin {
     saveDefaultConfig();
 
     ACTIVE_CARRIERS_STORE = new CarrierAllaysStore();
-
-    try {
-      CONFIG_INSTANCE = new BukkitConfigManagerBuilder()
-        .build()
-        .load(new File(getDataFolder(), "config.yml"), CarrierAllaysPluginConfig.class);
-    } catch (IOException | IllegalStateException e) {
-      getLogger().severe("Failed to load config: " + e.getMessage());
-      getServer().getPluginManager().disablePlugin(this);
-      return;
-    }
-      
     ACTIVE_CARRIERS_STORE.initActiveCarrierAllays(getServer());
 
     getServer().getPluginManager()

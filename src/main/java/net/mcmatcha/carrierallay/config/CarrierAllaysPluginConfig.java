@@ -49,7 +49,7 @@ public class CarrierAllaysPluginConfig implements Config {
      * Default: 1
      */
     @JsonProperty("carrier-allay-speed")
-    private double carrierAllaySpeed = 1d;
+    private double carrierAllaySpeed = 1.5d;
 
     /**
      * Determines how far the player can drift from the current path goal before the allay repaths.
@@ -82,6 +82,23 @@ public class CarrierAllaysPluginConfig implements Config {
      */
     @JsonProperty("hover-tolerance")
     private double hoverTolerance = 4d;
+
+    /**
+     * Enables "matcha flavoured" mode. Tweaks how you spawn carriers, requires the matcha flavoured datapack installed.
+     */
+    @JsonProperty("matcha-flavoured")
+    private boolean matchaFlavoured = false;
+
+    @JsonProperty("mf-datapack-filename")
+    private String matchaFlavouredDatapackFilename = "matcha-flavoured";
+
+    public String getMatchaFlavouredDatapackFilename() {
+        return matchaFlavouredDatapackFilename;
+    }
+    
+    public boolean getMatchaFlavoured() {
+        return matchaFlavoured;
+    }
 
     public long getFlyAwayMillis() {
         return flyAwayMillis;

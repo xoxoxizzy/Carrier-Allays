@@ -1,0 +1,7 @@
+name: CarrierAllays
+author: xoxoxizzy
+version: '0.1'
+main: net.mcmatcha.carrierallay.CarrierAllaysPlugin
+description: Carrier pidgeons but they're allays
+api-version: '26.3'
+bootstrapper: net.mcmatcha.carrierallay.CarrierAllaysBootstrap

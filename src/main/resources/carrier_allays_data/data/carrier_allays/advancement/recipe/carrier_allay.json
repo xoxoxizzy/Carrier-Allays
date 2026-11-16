@@ -1,0 +1,36 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "has_book_and_quill": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": "minecraft:writable_book"
+                    }
+                ]
+            }
+        },
+        "has_fragment": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": "minecraft:turtle_scute"
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "has_book_and_quill",
+            "has_fragment"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "carrier_allays:crafting/carrier_allay"
+        ]
+    }
+}

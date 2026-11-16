@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "category": "misc",
+    "ingredients": [
+        "minecraft:writable_book",
+        "minecraft:turtle_scute"
+    ],
+    "result": {
+        "components": {
+            "minecraft:custom_name": {
+                "text": "Carrier Allay",
+                "italic": false
+            },
+            "minecraft:item_model": "carrier_allays:carrier_allay_egg"
+        },
+        "count": 1,
+        "id": "minecraft:allay_spawn_egg"
+    }
+}
