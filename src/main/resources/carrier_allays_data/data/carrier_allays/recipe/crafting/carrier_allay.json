@@ -3,7 +3,7 @@
     "category": "misc",
     "ingredients": [
         "minecraft:writable_book",
-        "minecraft:turtle_scute"
+        "minecraft:nether_star"
     ],
     "result": {
         "components": {

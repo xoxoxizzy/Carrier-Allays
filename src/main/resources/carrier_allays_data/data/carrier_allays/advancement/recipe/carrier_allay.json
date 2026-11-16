@@ -11,12 +11,12 @@
                 ]
             }
         },
-        "has_fragment": {
+        "has_favour": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "items": "minecraft:turtle_scute"
+                        "items": "minecraft:nether_star"
                     }
                 ]
             }
