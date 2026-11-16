@@ -36,7 +36,6 @@ public class CarrierAllaysPlugin extends JavaPlugin {
   public void onEnable() {
     INSTANCE = this;
     CommandAPI.onEnable();
-    saveDefaultConfig();
 
     ACTIVE_CARRIERS_STORE = new CarrierAllaysStore();
     ACTIVE_CARRIERS_STORE.initActiveCarrierAllays(getServer());
