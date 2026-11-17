@@ -9,6 +9,11 @@ import org.bukkit.event.world.EntitiesLoadEvent;
 import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
 import net.mcmatcha.carrierallay.models.CarrierAllayData;
 
+/**
+ * Listens for when an entity loads
+ * 
+ * @author Copyright (c) xoxoxizzy. All Rights Reserved.
+ */
 public class AllayEntityLoadListener implements Listener {
 
     @EventHandler 

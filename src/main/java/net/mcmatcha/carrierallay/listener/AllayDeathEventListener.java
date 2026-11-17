@@ -8,6 +8,11 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
 
+/**
+ * Listens for when an allay dies
+ * 
+ * @author Copyright (c) xoxoxizzy. All Rights Reserved.
+ */
 public class AllayDeathEventListener implements Listener {
     
     @EventHandler 

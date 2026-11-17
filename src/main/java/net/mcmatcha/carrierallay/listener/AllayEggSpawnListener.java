@@ -9,7 +9,8 @@ import org.bukkit.persistence.PersistentDataType;
 import net.mcmatcha.carrierallay.models.CarrierAllayData;
 
 /**
- *
+ * Listens for when a player spawns a carrier
+ * 
  * @author Copyright (c) xoxoxizzy. All Rights Reserved.
  */
 

@@ -49,3 +49,7 @@ hover-tolerance: 4
 # Enables "matcha flavoured" mode. Tweaks how you spawn carriers, requires the matcha flavoured datapack installed.
 matcha-flavoured: false
 mf-datapack-filename: matcha-flavoured
+
+# Determines how long a player must wait after sending a carrier before they can send another one.
+# Default: 3m
+rename-cooldown-milliseconds: 180000
