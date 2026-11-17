@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import io.papermc.paper.event.player.PlayerNameEntityEvent;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
 import net.mcmatcha.carrierallay.models.CarrierAllayData;
@@ -52,6 +53,16 @@ public class AllayEntityRenameListener implements Listener {
         Player targetPlayer = matchedPlayers.get(0);
 
         // Perhaps guard if the player is too far??
+
+        // Cooldown so players cannot spam carriers
+        long secondsLeft = CarrierAllaysPlugin.CARRIER_COOLDOWNS_STORE.secondsLeft(senderPlayer.getUniqueId());
+
+        if (secondsLeft > 0) {
+            senderPlayer.sendMessage(Component.text("You can send another carrier in " + secondsLeft + "s"));
+            return; // do nothing
+        }
+
+        CarrierAllaysPlugin.CARRIER_COOLDOWNS_STORE.markNow(senderPlayer.getUniqueId());
 
         // Create our carrier allay data and store it :3
         CarrierAllayData newData = new CarrierAllayData(
