@@ -92,12 +92,23 @@ public class CarrierAllaysPluginConfig implements Config {
     @JsonProperty("mf-datapack-filename")
     private String matchaFlavouredDatapackFilename = "matcha-flavoured";
 
+    /**
+     * Determines how long a player must wait after sending a carrier before they can send another one.
+     * Default: 3m
+     */
+    @JsonProperty("rename-cooldown-milliseconds")
+    private long renameCooldownMillis = 180000L;
+
     public String getMatchaFlavouredDatapackFilename() {
         return matchaFlavouredDatapackFilename;
     }
     
     public boolean getMatchaFlavoured() {
         return matchaFlavoured;
+    }
+
+    public long getRenameCooldownMillis() {
+        return renameCooldownMillis;
     }
 
     public long getFlyAwayMillis() {
