@@ -17,13 +17,6 @@ public class AllayEntityLoadListener implements Listener {
             if (entity instanceof Allay allay && CarrierAllayData.loadFromAllayPDC(allay) != null) {
                 CarrierAllaysPlugin.ACTIVE_CARRIERS_STORE.AddCarrierAllay(allay.getUniqueId());
             }
-
-            String name = entity.getName();
-
-            if ("Carrier Allay".equals(name)) {
-                
-            }
-
         }
     }
     
