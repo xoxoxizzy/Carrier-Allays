@@ -6,6 +6,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
 import net.mcmatcha.carrierallay.config.CarrierAllaysPluginConfig;
 import net.mcmatcha.carrierallay.listener.AllayDeathEventListener;
+import net.mcmatcha.carrierallay.listener.AllayEggSpawnListener;
 import net.mcmatcha.carrierallay.listener.AllayEntityLoadListener;
 import net.mcmatcha.carrierallay.listener.AllayEntityRenameListener;
 import net.mcmatcha.carrierallay.managers.CarrierAllaysStore;
@@ -42,6 +43,8 @@ public class CarrierAllaysPlugin extends JavaPlugin {
 
     getServer().getPluginManager()
       .registerEvents(new AllayEntityRenameListener(this), this);
+    getServer().getPluginManager()
+      .registerEvents(new AllayEggSpawnListener(), this);
     getServer().getPluginManager()
       .registerEvents(new AllayDeathEventListener(), this);
     getServer().getPluginManager()

@@ -19,15 +19,29 @@ public record CarrierAllayData (
     UUID sender,
     UUID target,
     UUID carrier,
+    boolean should_return,
     CarrierAllayStatus currentStatus
 ) {
 
     public static final NamespacedKey SENDER_KEY = new NamespacedKey(CarrierAllaysPlugin.INSTANCE, "sender");
     public static final NamespacedKey STATUS_KEY = new NamespacedKey(CarrierAllaysPlugin.INSTANCE, "status");
     public static final NamespacedKey TARGET_KEY = new NamespacedKey(CarrierAllaysPlugin.INSTANCE, "target");
+    public static final NamespacedKey SHOULD_RETURN_KEY = new NamespacedKey(CarrierAllaysPlugin.INSTANCE, "should_return");
+
+    public CarrierAllayData(UUID sender, UUID target, UUID carrier, boolean should_return, CarrierAllayStatus currentStatus) {
+        this.sender = sender;
+        this.target = target;
+        this.carrier = carrier;
+        this.should_return = should_return;
+        this.currentStatus = currentStatus;
+    }
+
+    public CarrierAllayData(UUID sender, UUID target, UUID carrier, CarrierAllayStatus currentStatus) {
+        this(sender, target, carrier, false, currentStatus);
+    }
 
     public CarrierAllayData withStatus(CarrierAllayStatus status)  {
-        return new CarrierAllayData(this.sender, this.target, this.carrier, status);
+        return new CarrierAllayData(this.sender, this.target, this.carrier, this.should_return, status);
     }
 
     public static PersistentDataType<long[], UUID> UUID_TYPE = new PersistentDataType<long[], UUID>() {
@@ -62,6 +76,7 @@ public record CarrierAllayData (
         UUID sender = pdc.get(SENDER_KEY, UUID_TYPE);
         UUID target = (UUID)pdc.get(TARGET_KEY, UUID_TYPE);
         Integer statusCode = pdc.get(STATUS_KEY, PersistentDataType.INTEGER);
+        Byte shouldReturn = pdc.get(SHOULD_RETURN_KEY, PersistentDataType.BYTE);
 
         // Guard for empty pdc data
         if (sender == null || target == null || statusCode == null ) {
@@ -72,6 +87,7 @@ public record CarrierAllayData (
             sender,
             target,
             allay.getUniqueId(),
+            shouldReturn != null && shouldReturn != 0,
             CarrierAllayStatus.fromCode(statusCode)
         );
     }
@@ -81,6 +97,12 @@ public record CarrierAllayData (
         pdc.set(SENDER_KEY, UUID_TYPE, this.sender);
         pdc.set(TARGET_KEY, UUID_TYPE, this.target);
         pdc.set(STATUS_KEY, PersistentDataType.INTEGER, this.currentStatus.getCode());
+        pdc.set(SHOULD_RETURN_KEY, PersistentDataType.BYTE, (byte)(this.should_return ? 1 : 0));
+    }
+
+    public static boolean isSpawnedIn(Allay allay) {
+        Byte spawned = allay.getPersistentDataContainer().get(SHOULD_RETURN_KEY, PersistentDataType.BYTE);
+        return spawned != null && spawned != 0;
     }
 
 }

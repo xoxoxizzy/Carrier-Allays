@@ -92,7 +92,15 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
         CarrierAllaysPlugin.ACTIVE_CARRIERS_STORE.RemoveCarrierAllay(carrierAllay.getData().carrier());
 
         if (CONFIG.getMatchaFlavoured() && Bukkit.getRecipe(CARRIER_RECIPE_KEY) != null) {
-            carrierAllay.returnToPlayer();
+
+            // A spawned-in allay is the item itself so we despawn it
+            if (carrierAllay.getData().should_return()) {
+                carrierAllay.returnToPlayer();
+                return;
+            }
+
+            // A vanilla allay the sender renamed stays alive
+            carrierAllay.clearPDC();
             return;
         }
 
@@ -108,14 +116,23 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
     private void deliveryLoop(BukkitTask t, CarrierAllayManager carrierAllay) {
 
         Player target = carrierAllay.getTargetPlayer();
+        Allay allay = carrierAllay.getAllay();
 
         // Wait for the target to come back online instead of crashing
         if (target == null || !target.isOnline() || target.isDead())
             return;
 
-        // When the target is too far away to fly to, let the allay visibly
-        // fly away for a moment before teleporting near the target
-        if (carrierAllay.isCarrierAllayTargetTooFar()) {
+        // When the target is in another dimension or too far away to fly to,
+        // teleport near the target instead
+        boolean crossDimension = allay.getWorld() != target.getWorld();
+
+        if (crossDimension) {
+
+            if (!carrierAllay.teleportNear(target))
+                return; // try again next tick
+
+            carrierAllay.notifyPlayer(target, "A carrier allay approaches from another dimension...");
+        } else if (carrierAllay.isCarrierAllayTargetTooFar()) {
             long now = System.currentTimeMillis();
             Long teleportAt = flyAwayTeleportAt.get(carrierAllay.getAllay());
 
@@ -152,14 +169,20 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
     private void returningLoop(BukkitTask t, CarrierAllayManager carrierAllay) {
 
         Player sender = carrierAllay.getSenderPlayer();
+        Allay allay = carrierAllay.getAllay();
 
         // Wait for the sender to come back online instead of crashing
         if (sender == null || !sender.isOnline() || sender.isDead())
             return;
 
-        // When the sender is too far away to fly to, let the allay visibly
-        // fly away for a moment before teleporting near the sender
-        if (carrierAllay.isCarrierAllaySenderTooFar()) {
+        // When the sender is in another dimension or too far away to fly to,
+        // teleport near the sender instead
+        boolean crossDimension = allay.getWorld() != sender.getWorld();
+
+        if (crossDimension) {
+            if (!carrierAllay.teleportNear(sender))
+                return; // try again next tick
+        } else if (carrierAllay.isCarrierAllaySenderTooFar()) {
             long now = System.currentTimeMillis();
             Long teleportAt = flyAwayTeleportAt.get(carrierAllay.getAllay());
 

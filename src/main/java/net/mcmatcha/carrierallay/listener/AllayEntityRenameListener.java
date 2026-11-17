@@ -51,12 +51,6 @@ public class AllayEntityRenameListener implements Listener {
 
         Player targetPlayer = matchedPlayers.get(0);
 
-        // Guard that the player is in the same dimension
-        if ( !targetPlayer.getLocation().getWorld().getEnvironment().equals(
-            entity.getLocation().getWorld().getEnvironment() )
-        )
-            return; // do nothing
-
         // Perhaps guard if the player is too far??
 
         // Create our carrier allay data and store it :3
@@ -64,6 +58,7 @@ public class AllayEntityRenameListener implements Listener {
             senderPlayer.getUniqueId(),
             targetPlayer.getUniqueId(),
             entity.getUniqueId(),
+            CarrierAllayData.isSpawnedIn((Allay)entity),
             CarrierAllayStatus.WAITING
         );
 

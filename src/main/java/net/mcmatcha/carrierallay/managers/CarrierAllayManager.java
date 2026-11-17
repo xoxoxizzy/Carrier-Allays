@@ -237,7 +237,17 @@ public class CarrierAllayManager {
             if (!world.isChunkLoaded(candidate.getBlockX() >> 4, candidate.getBlockZ() >> 4))
                 continue;
 
-            getAllay().teleport(findSafeSpot(candidate));
+            Location departure = getAllay().getLocation();
+            Location destination = findSafeSpot(candidate);
+
+            world.spawnParticle(Particle.ENCHANT, departure, 30);
+            world.playSound(departure, Sound.ENTITY_ENDER_EYE_DEATH, 1.0f, 1.0f);
+
+            getAllay().teleport(destination);
+
+            world.spawnParticle(Particle.ENCHANT, destination, 30);
+            world.playSound(destination, Sound.ENTITY_ENDER_EYE_DEATH, 1.0f, 1.0f);
+
             return true;
         }
 
