@@ -23,8 +23,7 @@ Requires [Minecraft Matcha Flavoured](https://modrinth.com/datapack/matcha-flavo
 
 You craft the carrier allay with a book and quill and an amalgamated pith. 
 
-<img width="595" height="475" alt="adssadf" src="https://github.com/user-attachments/assets/0ae00d51-39ee-42fd-b9b7-b5d575085a35" />
-
+<img width="568" height="415" alt="Screenshot 2026-11-18 at 12 26 21 AM" src="https://github.com/user-attachments/assets/c7fd14cf-a13e-4d06-ad2b-d97167ec8148" />
 
 After which you can spawn in the allay, rename it to a player's name and send it off. This mode can be setup in the plugin config and also requires the acompanying texture pack. (Or you can make your own texture)
 
