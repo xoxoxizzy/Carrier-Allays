@@ -53,3 +53,19 @@ mf-datapack-filename: matcha-flavoured
 # Determines how long a player must wait after sending a carrier before they can send another one.
 # Default: 3m
 rename-cooldown-milliseconds: 180000
+
+
+# Text configs
+# Change these to your custom strings! 
+# Use the following template strings: 
+# {cooldown} - The amount of time left for the player's cooldown
+# {target} - The player who got sent a carrier
+# {sender} - The player who sent the carrier
+
+text:
+  allay-approach-world: "A carrier allay approaches from a long distance..."
+  allay-approach-dimensional: "A carrier allay approaches from another dimension..."
+  allay-rename-on-cooldown: "You can send another carrier in {cooldown}s"
+  allay-egg-spawn-on-cooldown: "You can spawn another carrier in {cooldown}s"
+  delivery-completed: "Your delivery from {sender} has arrived!"
+  delivery-arrived: "Your package was delivered to {target}"

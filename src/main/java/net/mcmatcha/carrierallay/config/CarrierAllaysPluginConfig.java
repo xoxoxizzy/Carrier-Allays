@@ -99,6 +99,13 @@ public class CarrierAllaysPluginConfig implements Config {
     @JsonProperty("rename-cooldown-milliseconds")
     private long renameCooldownMillis = 180000L;
 
+    /**
+     * Custom text for the plugin
+     * a config file without a text section falls back to the defaults.
+     */
+    @JsonProperty("text")
+    private CarrierAllaysPluginTextConfig text = new CarrierAllaysPluginTextConfig();
+
     public String getMatchaFlavouredDatapackFilename() {
         return matchaFlavouredDatapackFilename;
     }
@@ -109,6 +116,10 @@ public class CarrierAllaysPluginConfig implements Config {
 
     public long getRenameCooldownMillis() {
         return renameCooldownMillis;
+    }
+
+    public CarrierAllaysPluginTextConfig getText() {
+        return text;
     }
 
     public long getFlyAwayMillis() {
