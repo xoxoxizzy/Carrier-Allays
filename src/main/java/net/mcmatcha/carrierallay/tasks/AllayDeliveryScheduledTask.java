@@ -18,6 +18,7 @@ import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
 import net.mcmatcha.carrierallay.config.CarrierAllaysPluginConfig;
 import net.mcmatcha.carrierallay.managers.CarrierAllayManager;
 import net.mcmatcha.carrierallay.models.CarrierAllayStatus;
+import net.mcmatcha.carrierallay.util.StringFormatUtil;
 
 public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
 
@@ -25,7 +26,6 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
     // the item only works when that recipe is actually loaded
     private static final NamespacedKey CARRIER_RECIPE_KEY = new NamespacedKey("carrier_allays", "crafting/carrier_allay");
 
-    private List<CarrierAllayManager> carrierAllays;
     private static final Logger LOGGER = CarrierAllaysPlugin.INSTANCE.getLogger();
     private static final CarrierAllaysPluginConfig CONFIG = CarrierAllaysPlugin.CONFIG_INSTANCE;
 
@@ -55,27 +55,15 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
                 managers.add(manager);
         }
 
-        this.carrierAllays = managers;
-
-        for (CarrierAllayManager carrierAllay : carrierAllays) {
+        for (CarrierAllayManager carrierAllay : managers) {
 
             switch (carrierAllay.getStatus()) {
 
-                case COMPLETE:
-                    completeLoop(t, carrierAllay);
-                    break;
-                case DELIVERY:
-                    deliveryLoop(t, carrierAllay);
-                    break;
-                case RETURNING:
-                    returningLoop(t, carrierAllay);
-                    break;
-                case WAITING:
-                    waitingLoop(t, carrierAllay);
-                    break;
-                default:
-                    t.cancel();
-                    break;
+                case COMPLETE -> completeLoop(t, carrierAllay);
+                case DELIVERY -> deliveryLoop(t, carrierAllay);
+                case RETURNING -> returningLoop(t, carrierAllay);
+                case WAITING -> waitingLoop(t, carrierAllay);
+                default -> t.cancel();
 
             }
 
@@ -117,6 +105,7 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
 
         Player target = carrierAllay.getTargetPlayer();
         Allay allay = carrierAllay.getAllay();
+        StringFormatUtil stringFormatUtil = carrierAllay.getStringFormatter();
 
         // Wait for the target to come back online instead of crashing
         if (target == null || !target.isOnline() || target.isDead())
@@ -131,7 +120,7 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
             if (!carrierAllay.teleportNear(target))
                 return; // try again next tick
 
-            carrierAllay.notifyPlayer(target, "A carrier allay approaches from another dimension...");
+            carrierAllay.notifyPlayer(target, CONFIG.getText().getAllayApproachDimensional());
         } else if (carrierAllay.isCarrierAllayTargetTooFar()) {
             long now = System.currentTimeMillis();
             Long teleportAt = flyAwayTeleportAt.get(carrierAllay.getAllay());
@@ -152,7 +141,7 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
             if (!carrierAllay.teleportNear(target))
                 return;
 
-            carrierAllay.notifyPlayer(carrierAllay.getTargetPlayer(), "A carrier allay approaches from a long distance...");
+            carrierAllay.notifyPlayer(carrierAllay.getTargetPlayer(), CONFIG.getText().getAllayApproachWorld());
         }
 
         carrierAllay.pathfindTo(target, CARRIER_ALLAY_SPEED);
@@ -160,8 +149,8 @@ public class AllayDeliveryScheduledTask implements Consumer<BukkitTask> {
         // Once close, drop the item and then switch to returning mode
         if (carrierAllay.isCarrierAllayNearTarget()) {
             carrierAllay.DropItem();
-            carrierAllay.notifyPlayer(target, "Your delivery from " + carrierAllay.getSenderName() + " has arrived!");
-            carrierAllay.notifyPlayer(carrierAllay.getSenderPlayer(), "Your package was delivered to " + carrierAllay.getTargetName());
+            carrierAllay.notifyPlayer(target, stringFormatUtil.format(CONFIG.getText().getDeliveryCompleted()));
+            carrierAllay.notifyPlayer(carrierAllay.getSenderPlayer(), stringFormatUtil.format(CONFIG.getText().getDeliveryArrived()));
             carrierAllay.setStatus(CarrierAllayStatus.RETURNING);
         }
     }

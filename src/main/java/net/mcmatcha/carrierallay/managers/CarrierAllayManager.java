@@ -1,5 +1,6 @@
 package net.mcmatcha.carrierallay.managers;
 
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
@@ -26,6 +27,7 @@ import net.kyori.adventure.text.Component;
 import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
 import net.mcmatcha.carrierallay.models.CarrierAllayData;
 import net.mcmatcha.carrierallay.models.CarrierAllayStatus;
+import net.mcmatcha.carrierallay.util.StringFormatUtil;
 
 public class CarrierAllayManager {
 
@@ -49,9 +51,16 @@ public class CarrierAllayManager {
     private CarrierAllayData carrierAllayData;
     private final Allay allay;
 
+    private StringFormatUtil stringFormatter;
+
     public CarrierAllayManager(Allay allay) {
         this.carrierAllayData = CarrierAllayData.loadFromAllayPDC(allay);
         this.allay = allay;
+        
+        this.stringFormatter = new StringFormatUtil(Map.of(
+            "sender", getSenderName(),
+            "target", getTargetName()
+        ));
     }
 
     public void setStatus(CarrierAllayStatus newStatus) {
@@ -221,7 +230,15 @@ public class CarrierAllayManager {
     }
 
     private String getPlayerName(Player player) {
+        // The player might logged off while the carrier is active
+        if (player == null)
+            return "unknown"; // do nothing
+
         return player.getName();
+    }
+
+    public StringFormatUtil getStringFormatter() {
+        return stringFormatter;
     }
 
     public boolean teleportNear(Player player) {
@@ -300,6 +317,10 @@ public class CarrierAllayManager {
     }
 
     public void notifyPlayer(Player player, String textContent) {
+
+        // The player may have logged off while the carrier is active
+        if (player == null)
+            return; // do nothing
 
         player.playSound(
             player.getLocation(), 
