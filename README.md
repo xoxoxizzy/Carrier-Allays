@@ -2,7 +2,8 @@
 carrier pigeons, but they're allays.
 
 <img width="1280" height="640" alt="repository-open-graph-template" src="https://github.com/user-attachments/assets/f0ab75a8-d1f9-4a95-a2b2-d3f0d1b498be" />
-ty to madelinebug for the texture :3
+<sup>ty to madelinebug for the texture :3</sup>
+
 
 name an allay after someone whos online (with a name tag), hand it a little package, and off it goes to deliver it. when the job is done it flies back home to you. because it misses you. :3
 
