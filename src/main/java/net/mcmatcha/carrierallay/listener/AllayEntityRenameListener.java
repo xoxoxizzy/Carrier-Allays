@@ -59,7 +59,9 @@ public class AllayEntityRenameListener implements Listener {
 
         if (secondsLeft > 0) {
             senderPlayer.sendMessage(Component.text("You can send another carrier in " + secondsLeft + "s"));
-            return; // do nothing
+            nameEntityEvent.setCancelled(true);
+            entity.customName(null);
+            return;
         }
 
         CarrierAllaysPlugin.CARRIER_COOLDOWNS_STORE.markNow(senderPlayer.getUniqueId());
