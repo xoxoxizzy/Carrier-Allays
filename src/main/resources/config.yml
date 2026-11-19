@@ -54,6 +54,11 @@ mf-datapack-filename: matcha-flavoured
 # Default: 3m
 rename-cooldown-milliseconds: 180000
 
+# Determines the log level in the console
+# Values: SEVERE, WARNING, INFO, FINE, FINER, FINEST
+# Default: INFO
+log-level: INFO
+
 
 # Text configs
 # Change these to your custom strings! 

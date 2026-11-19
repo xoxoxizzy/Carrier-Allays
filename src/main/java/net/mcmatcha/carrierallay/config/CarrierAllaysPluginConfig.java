@@ -100,6 +100,13 @@ public class CarrierAllaysPluginConfig implements Config {
     private long renameCooldownMillis = 180000L;
 
     /**
+     * Determines the log level of the plugin
+     * Default: INFO
+     */
+    @JsonProperty("log-level")
+    private String logLevel = "INFO";
+
+    /**
      * Custom text for the plugin
      * a config file without a text section falls back to the defaults.
      */
@@ -116,6 +123,10 @@ public class CarrierAllaysPluginConfig implements Config {
 
     public long getRenameCooldownMillis() {
         return renameCooldownMillis;
+    }
+
+    public String getLogLevel() {
+        return logLevel;
     }
 
     public CarrierAllaysPluginTextConfig getText() {

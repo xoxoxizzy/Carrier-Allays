@@ -1,5 +1,7 @@
 package net.mcmatcha.carrierallay;
 
+import java.util.logging.Level;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.CommandAPI;
@@ -41,6 +43,13 @@ public class CarrierAllaysPlugin extends JavaPlugin {
   public void onEnable() {
     INSTANCE = this;
     CommandAPI.onEnable();
+
+    try {
+      getLogger().setLevel(Level.parse(CONFIG_INSTANCE.getLogLevel()));
+    } catch (IllegalArgumentException e) {
+      getLogger().warning("Invalid log-level in config.yml, defaulting to INFO.");
+      getLogger().setLevel(Level.INFO);
+    }
 
     ACTIVE_CARRIERS_STORE = new CarrierAllaysStore();
     ACTIVE_CARRIERS_STORE.initActiveCarrierAllays(getServer());
