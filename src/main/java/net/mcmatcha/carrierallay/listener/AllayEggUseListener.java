@@ -1,5 +1,7 @@
 package net.mcmatcha.carrierallay.listener;
 
+import java.util.logging.Level;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -25,6 +27,9 @@ public class AllayEggUseListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
+
+        CarrierAllaysPlugin.INSTANCE.getLogger().log(Level.FINEST, "==Player Interact event==");
+
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
             return; // do nothing
 

@@ -1,10 +1,13 @@
 package net.mcmatcha.carrierallay.listener;
 
+import java.util.logging.Level;
+
 import org.bukkit.entity.Allay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
 import net.mcmatcha.carrierallay.models.CarrierAllayData;
 
 /**
@@ -17,6 +20,9 @@ public class AllayDamageEventListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
+
+        CarrierAllaysPlugin.INSTANCE.getLogger().log(Level.FINEST, "==Entity damage event==");
+
         if (!(event.getEntity() instanceof Allay allay))
             return; // do nothing
 

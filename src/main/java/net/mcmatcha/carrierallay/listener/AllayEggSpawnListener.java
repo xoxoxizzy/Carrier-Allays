@@ -1,11 +1,14 @@
 package net.mcmatcha.carrierallay.listener;
 
+import java.util.logging.Level;
+
 import org.bukkit.entity.Allay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.persistence.PersistentDataType;
 
+import net.mcmatcha.carrierallay.CarrierAllaysPlugin;
 import net.mcmatcha.carrierallay.models.CarrierAllayData;
 
 /**
@@ -18,6 +21,9 @@ public class AllayEggSpawnListener implements Listener {
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
+
+        CarrierAllaysPlugin.INSTANCE.getLogger().log(Level.FINEST, "==Creature spawn event==");
+
         CreatureSpawnEvent.SpawnReason spawnReason = event.getSpawnReason();
         if (spawnReason != CreatureSpawnEvent.SpawnReason.SPAWNER_EGG
             && spawnReason != CreatureSpawnEvent.SpawnReason.DISPENSE_EGG)

@@ -1,5 +1,7 @@
 package net.mcmatcha.carrierallay.listener;
 
+import java.util.logging.Level;
+
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -17,6 +19,9 @@ public class AllayDeathEventListener implements Listener {
     
     @EventHandler 
     public void onEntityDeath(EntityDeathEvent event) {
+
+        CarrierAllaysPlugin.INSTANCE.getLogger().log(Level.FINEST, "==Entity death event==");
+
         // Get the entoity 
         LivingEntity entity = event.getEntity();
         EntityType entityType = event.getEntityType();

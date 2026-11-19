@@ -1,5 +1,7 @@
 package net.mcmatcha.carrierallay.listener;
 
+import java.util.logging.Level;
+
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -18,6 +20,9 @@ public class AllayEntityLoadListener implements Listener {
 
     @EventHandler 
     public void onEntityLoad(EntitiesLoadEvent event) {
+
+        CarrierAllaysPlugin.INSTANCE.getLogger().log(Level.FINEST, "==Entity Load event==");
+
         for (Entity entity: event.getEntities()) {
             if (entity instanceof Allay allay && CarrierAllayData.loadFromAllayPDC(allay) != null) {
                 CarrierAllaysPlugin.ACTIVE_CARRIERS_STORE.AddCarrierAllay(allay.getUniqueId());

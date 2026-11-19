@@ -1,6 +1,7 @@
 package net.mcmatcha.carrierallay.listener;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Allay;
@@ -33,6 +34,8 @@ public class AllayEntityRenameListener implements Listener {
 
     @EventHandler
     public void  onEntityEvent(PlayerNameEntityEvent nameEntityEvent) {
+
+        CarrierAllaysPlugin.INSTANCE.getLogger().log(Level.FINEST, "==Entity rename event==");
 
         // Get the sneder, entity and the new name tagged
         LivingEntity entity = nameEntityEvent.getEntity();
